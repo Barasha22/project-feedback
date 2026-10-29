@@ -13,6 +13,17 @@ uv run manage.py migrate
 uv run manage.py runserver
 ```
 
+Install and build the frontend assets in another terminal:
+
+```shell
+npm install
+npm run build
+```
+
+During stylesheet development, run `npm run dev:css` to rebuild Tailwind when
+templates or the CSS-first configuration change. Re-run `npm run build` before
+committing so the production assets stay in sync.
+
 Run the quality checks with:
 
 ```shell

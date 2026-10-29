@@ -1,0 +1,16 @@
+{
+  "name": "project-feedback-assets",
+  "private": true,
+  "scripts": {
+    "build": "npm run build:css && npm run build:vendor",
+    "build:css": "tailwindcss -i ./assets/css/app.css -o ./static/css/app.css --minify",
+    "build:vendor": "mkdir -p static/js/vendor && cp node_modules/htmx.org/dist/htmx.min.js static/js/vendor/htmx.min.js && cp node_modules/alpinejs/dist/cdn.min.js static/js/vendor/alpine.min.js",
+    "dev:css": "tailwindcss -i ./assets/css/app.css -o ./static/css/app.css --watch"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "4.3.3",
+    "alpinejs": "3.17.5",
+    "htmx.org": "2.0.11",
+    "tailwindcss": "4.3.3"
+  }
+}
