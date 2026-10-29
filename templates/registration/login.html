@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Log in · Project Feedback{% endblock %}
+
+{% block content %}
+  <section class="mx-auto max-w-md">
+    <h1 class="text-3xl font-bold tracking-tight">Log in</h1>
+    <p class="mt-2 text-slate-600">Continue with your username and password.</p>
+
+    <form class="mt-8 space-y-5" method="post">
+      {% csrf_token %}
+      {% if form.non_field_errors %}
+        <div class="rounded-md bg-red-50 p-3 text-sm text-red-700" role="alert">
+          {{ form.non_field_errors }}
+        </div>
+      {% endif %}
+      {% for field in form %}
+        <div>
+          <label class="block text-sm font-medium text-slate-700" for="{{ field.id_for_label }}">
+            {{ field.label }}
+          </label>
+          <div class="mt-1">{{ field }}</div>
+          {% for error in field.errors %}<p class="mt-1 text-sm text-red-700">{{ error }}</p>{% endfor %}
+        </div>
+      {% endfor %}
+      {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+      <button class="w-full rounded-md bg-brand-600 px-4 py-2 font-medium text-white hover:bg-brand-700" type="submit">
+        Log in
+      </button>
+    </form>
+
+    <p class="mt-6 text-center text-sm text-slate-600">
+      Need an account? <a class="font-medium text-brand-700" href="{% url 'accounts:signup' %}">Sign up</a>
+    </p>
+  </section>
+{% endblock %}

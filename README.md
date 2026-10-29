@@ -62,3 +62,13 @@ docker compose run --rm web ffmpeg -version
 Stop the environment with `docker compose down`. Add `--volumes` only when you
 intend to delete the development database and shared scratch data.
 
+## Password recovery
+
+The application does not collect email addresses or provide self-service
+password reset. An administrator resets a forgotten password from the project
+environment:
+
+```shell
+uv run manage.py changepassword <username>
+```
+
