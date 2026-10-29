@@ -42,12 +42,19 @@ def project_create(request: HttpRequest) -> HttpResponse:
 @login_required
 def project_detail(request: HttpRequest, project_id: int) -> HttpResponse:
     project = get_object_or_404(
-        Project.objects.prefetch_related("memberships__user").filter(
-            memberships__user=request.user
-        ),
+        Project.objects.prefetch_related(
+            "memberships__user", "feedback_cycles__facilitator"
+        ).filter(memberships__user=request.user),
         pk=project_id,
     )
-    return render(request, "projects/project_detail.html", {"project": project})
+    can_create_cycle = project.memberships.filter(
+        user=request.user, role=Membership.Role.FACILITATOR
+    ).exists()
+    return render(
+        request,
+        "projects/project_detail.html",
+        {"project": project, "can_create_cycle": can_create_cycle},
+    )
 
 
 @login_required

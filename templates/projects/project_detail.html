@@ -37,4 +37,34 @@
       {% endfor %}
     </ul>
   </section>
+
+  <section class="mt-8">
+    <div class="flex items-center justify-between">
+      <h2 class="text-xl font-semibold">Feedback cycles</h2>
+      {% if can_create_cycle %}
+        <a class="rounded-md bg-brand-600 px-4 py-2 font-medium text-white hover:bg-brand-700" href="{% url 'cycles:create' project.pk %}">Open cycle</a>
+      {% endif %}
+    </div>
+    <ul class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+      {% for cycle in project.feedback_cycles.all %}
+        <li class="flex flex-wrap items-center justify-between gap-4 px-5 py-4">
+          <div>
+            <p class="font-medium">Week of {{ cycle.week_start }}</p>
+            <p class="text-sm text-slate-500">Facilitator: {{ cycle.facilitator.first_name|default:cycle.facilitator.username }}</p>
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="text-sm text-slate-500">{{ cycle.get_status_display }}</span>
+            {% if cycle.facilitator_id == user.id and cycle.status == "COLLECTING" %}
+              <form method="post" action="{% url 'cycles:close' cycle.pk %}">
+                {% csrf_token %}
+                <button class="font-medium text-brand-700" type="submit">Close cycle</button>
+              </form>
+            {% endif %}
+          </div>
+        </li>
+      {% empty %}
+        <li class="px-5 py-4 text-slate-600">No feedback cycles yet.</li>
+      {% endfor %}
+    </ul>
+  </section>
 {% endblock %}

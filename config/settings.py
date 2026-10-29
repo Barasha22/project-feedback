@@ -61,6 +61,7 @@ ALLOWED_HOSTS = [
 
 INSTALLED_APPS = [
     "accounts",
+    "cycles",
     "projects",
     "django.contrib.admin",
     "django.contrib.auth",
