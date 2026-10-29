@@ -1,9 +1,9 @@
 from django.contrib.auth.models import User
-from django.forms import DateInput, DateTimeInput, ModelForm
+from django.forms import CheckboxInput, DateInput, DateTimeInput, ModelForm, Textarea
 
 from projects.models import Project
 
-from .models import FeedbackCycle
+from .models import Card, FeedbackCycle
 
 
 class FeedbackCycleForm(ModelForm):
@@ -21,3 +21,19 @@ class FeedbackCycleForm(ModelForm):
         self.fields["facilitator"].queryset = User.objects.filter(
             project_memberships__project=project
         ).order_by("username")
+
+
+class CardForm(ModelForm):
+    class Meta:
+        model = Card
+        fields = ("text", "is_anonymous")
+        widgets = {
+            "text": Textarea(
+                attrs={
+                    "rows": 3,
+                    "maxlength": 500,
+                    "placeholder": "Add a short feedback card…",
+                }
+            ),
+            "is_anonymous": CheckboxInput(),
+        }

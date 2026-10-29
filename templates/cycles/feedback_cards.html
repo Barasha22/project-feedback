@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}Feedback · {{ cycle.project.name }}{% endblock %}
+
+{% block content %}
+  <header>
+    <p class="text-sm font-medium text-brand-700">{{ cycle.project.name }}</p>
+    <h1 class="mt-1 text-3xl font-bold tracking-tight">Start, Stop, Continue</h1>
+    <p class="mt-2 text-slate-600">Only your cards are visible before the retrospective.</p>
+    {% if not columns.0.can_edit %}
+      <p class="mt-4 rounded-md bg-amber-50 p-3 text-amber-800" role="status">Feedback collection is closed.</p>
+    {% endif %}
+  </header>
+  <div class="mt-8 grid gap-6 lg:grid-cols-3">
+    {% for column in columns %}
+      {% include "cycles/partials/card_column.html" with cycle=cycle category=column.category category_label=column.category_label cards=column.cards form=column.form can_edit=column.can_edit only %}
+    {% endfor %}
+  </div>
+{% endblock %}

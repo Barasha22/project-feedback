@@ -54,6 +54,7 @@
           </div>
           <div class="flex items-center gap-3">
             <span class="text-sm text-slate-500">{{ cycle.get_status_display }}</span>
+            <a class="font-medium text-brand-700" href="{% url 'cycles:feedback-cards' cycle.pk %}">Your feedback</a>
             {% if cycle.facilitator_id == user.id and cycle.status == "COLLECTING" %}
               <form method="post" action="{% url 'cycles:close' cycle.pk %}">
                 {% csrf_token %}

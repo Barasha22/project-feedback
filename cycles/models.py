@@ -37,3 +37,33 @@ class FeedbackCycle(models.Model):
 
     def __str__(self) -> str:
         return f"{self.project.name} · {self.week_start}"
+
+
+class Card(models.Model):
+    class Category(models.TextChoices):
+        START = "START", "Start"
+        STOP = "STOP", "Stop"
+        CONTINUE = "CONTINUE", "Continue"
+
+    cycle = models.ForeignKey(
+        FeedbackCycle, on_delete=models.CASCADE, related_name="cards"
+    )
+    category = models.CharField(max_length=10, choices=Category)
+    text = models.CharField(max_length=500)
+    author = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        related_name="feedback_cards",
+        null=True,
+        blank=True,
+    )
+    is_anonymous = models.BooleanField(default=False)
+    position = models.PositiveIntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ("category", "position", "pk")
+        indexes = [models.Index(fields=("cycle", "author", "category"))]
+
+    def __str__(self) -> str:
+        return self.text

@@ -1,0 +1,16 @@
+<article class="rounded-lg border border-brand-600 p-4">
+  <form
+    class="space-y-3"
+    method="post"
+    action="{% url 'cycles:card-edit' card.pk %}"
+    hx-post="{% url 'cycles:card-edit' card.pk %}"
+    hx-target="#cards-{{ card.category|lower }}"
+    hx-swap="outerHTML"
+  >
+    {% csrf_token %}
+    {{ form.text }}
+    {% for error in form.text.errors %}<p class="text-sm text-red-700">{{ error }}</p>{% endfor %}
+    <label class="flex items-center gap-2 text-sm text-slate-600">{{ form.is_anonymous }} Submit anonymously</label>
+    <button class="rounded-md bg-brand-600 px-3 py-2 text-sm font-medium text-white" type="submit">Save</button>
+  </form>
+</article>
