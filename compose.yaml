@@ -1,0 +1,63 @@
+services:
+  db:
+    image: postgres:18
+    environment:
+      POSTGRES_DB: project_feedback
+      POSTGRES_USER: project_feedback
+      POSTGRES_PASSWORD: project_feedback
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U project_feedback -d project_feedback"]
+      interval: 2s
+      timeout: 5s
+      retries: 15
+    volumes:
+      - postgres_data:/var/lib/postgresql
+
+  web:
+    build:
+      context: .
+    command:
+      - sh
+      - -c
+      - >-
+        python manage.py migrate &&
+        exec gunicorn config.wsgi:application --bind 0.0.0.0:8000 --reload
+    environment:
+      DATABASE_URL: postgresql://project_feedback:project_feedback@db:5432/project_feedback
+      SECRET_KEY: compose-development-only-secret
+      DEBUG: "true"
+      ALLOWED_HOSTS: localhost,127.0.0.1
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+      - scratch:/scratch
+
+  worker:
+    build:
+      context: .
+    command:
+      - sh
+      - -c
+      - >-
+        echo 'Worker placeholder: task #18 will configure django-tasks-db.' &&
+        exec sleep infinity
+    environment:
+      DATABASE_URL: postgresql://project_feedback:project_feedback@db:5432/project_feedback
+      SECRET_KEY: compose-development-only-secret
+      DEBUG: "true"
+      ALLOWED_HOSTS: localhost,127.0.0.1
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - .:/app
+      - scratch:/scratch
+
+volumes:
+  postgres_data:
+  scratch:
+

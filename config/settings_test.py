@@ -13,4 +13,5 @@ DATABASES = {  # noqa: F405
         "NAME": BASE_DIR / "db.sqlite3",  # noqa: F405
     }
 }
+ALLOWED_HOSTS = ["testserver"]
 

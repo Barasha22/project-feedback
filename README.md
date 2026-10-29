@@ -21,3 +21,33 @@ uv run ruff check .
 uv run ruff format --check .
 ```
 
+## Docker development environment
+
+Build and start PostgreSQL, the Django web service, and the placeholder worker:
+
+```shell
+docker compose up --build
+```
+
+The application is available at <http://localhost:8000>. PostgreSQL data is
+stored in the named `postgres_data` volume. The web and worker containers share
+the named `scratch` volume at `/scratch` for the later media pipeline.
+
+Run the test and quality checks in the built image:
+
+```shell
+docker compose run --rm web uv run pytest
+docker compose run --rm web uv run ruff check .
+docker compose run --rm web uv run ruff format --check .
+```
+
+Confirm the pinned runtime versions with:
+
+```shell
+docker compose run --rm web python --version
+docker compose run --rm web ffmpeg -version
+```
+
+Stop the environment with `docker compose down`. Add `--volumes` only when you
+intend to delete the development database and shared scratch data.
+
