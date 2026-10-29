@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}{{ project.name }} · Project Feedback{% endblock %}
+
+{% block content %}
+  <div class="flex flex-wrap items-start justify-between gap-6">
+    <div>
+      <p class="text-sm font-medium text-brand-700">Project</p>
+      <h1 class="mt-1 text-3xl font-bold tracking-tight">{{ project.name }}</h1>
+    </div>
+    {% if project.owner_id == user.id %}
+      <form method="post" action="{% url 'projects:rotate-join-token' project.pk %}">
+        {% csrf_token %}
+        <button class="rounded-md border border-slate-300 bg-white px-4 py-2 font-medium hover:border-brand-600" type="submit">
+          Rotate join link
+        </button>
+      </form>
+    {% endif %}
+  </div>
+
+  <section class="mt-10 rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+    <h2 class="text-lg font-semibold">Shareable join link</h2>
+    <p class="mt-2 break-all rounded-md bg-slate-100 p-3 font-mono text-sm">
+      {{ request.scheme }}://{{ request.get_host }}{% url 'join-project' project.join_token %}
+    </p>
+    <p class="mt-2 text-sm text-slate-500">Rotating the link invalidates the previous URL.</p>
+  </section>
+
+  <section class="mt-8">
+    <h2 class="text-xl font-semibold">Members</h2>
+    <ul class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+      {% for membership in project.memberships.all %}
+        <li class="flex justify-between px-5 py-4">
+          <span>{{ membership.user.first_name|default:membership.user.username }}</span>
+          <span class="text-sm text-slate-500">{{ membership.get_role_display }}</span>
+        </li>
+      {% endfor %}
+    </ul>
+  </section>
+{% endblock %}

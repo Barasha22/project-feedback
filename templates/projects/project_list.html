@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Projects · Project Feedback{% endblock %}
+
+{% block content %}
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="text-3xl font-bold tracking-tight">Projects</h1>
+      <p class="mt-2 text-slate-600">Teams where you collect and discuss feedback.</p>
+    </div>
+    <a class="rounded-md bg-brand-600 px-4 py-2 font-medium text-white hover:bg-brand-700" href="{% url 'projects:create' %}">
+      New project
+    </a>
+  </div>
+
+  <div class="mt-8 grid gap-4 sm:grid-cols-2">
+    {% for project in projects %}
+      <a class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm hover:border-brand-600" href="{% url 'projects:detail' project.pk %}">
+        <h2 class="font-semibold">{{ project.name }}</h2>
+      </a>
+    {% empty %}
+      <p class="text-slate-600">You do not belong to any projects yet.</p>
+    {% endfor %}
+  </div>
+{% endblock %}
