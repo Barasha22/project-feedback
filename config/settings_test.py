@@ -14,4 +14,3 @@ DATABASES = {  # noqa: F405
     }
 }
 ALLOWED_HOSTS = ["testserver"]
-

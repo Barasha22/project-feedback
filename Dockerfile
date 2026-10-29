@@ -61,8 +61,8 @@ COPY --from=uv /uv /uvx /bin/
 
 WORKDIR /app
 
-COPY --chown=app:app pyproject.toml README.md ./
-RUN uv sync --no-install-project
+COPY --chown=app:app pyproject.toml uv.lock README.md ./
+RUN uv sync --locked --no-install-project
 
 COPY --chown=app:app . .
 
